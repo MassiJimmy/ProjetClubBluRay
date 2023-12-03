@@ -1,0 +1,34 @@
+<nav> <!-- partie HTML de la barre de navigation -->
+	<ul>
+      <li><a href="index.php"> Accueil </a></li>
+      <?php // variante visiteur ou membre connecté
+	  if(ISSET($_SESSION['Authenticated']['login'])){
+		  require "includes/connectbdd.php";
+		    $sqlreq = 'SELECT count(IDemprunteur) FROM emprunter WHERE IDemprunteur= '.$_SESSION['Authenticated']['monID'].'  AND date_rendu IS NULL;';
+			$res=$connexion->query($sqlreq) or die('Echec de la requête nouveaux membres');
+			$toto=$res->fetch_array();
+			$empruntotal=$toto[0];
+	  echo '
+		<li><a href="editprofil.php">Modifier mon profil</a></li>
+	 	<li><a href="macollection.php">Gérer mes Films</a></li>
+		<li><a href="listechange.php">Voir les échanges possibles</a></li>';
+		if ($empruntotal > 0){
+			echo '<li><a href="mesemprunts.php">Gérer mes Emprunts ('.$empruntotal.' films emprunté)</a></li>';
+		}
+		else{
+			echo '<li><a href="mesemprunts.php">Gérer mes Emprunts</a></li>';
+		}
+	  }
+	  else {
+	  echo '<li><a href="inscription.php">Inscription au Club</a></li>';
+	  }
+	  ?>
+      <div>
+	  Recherches : 
+          <li><a href="fichefilm.php"> par IDfilm </a></li>   
+          <li><a href="findidrange.php"> par IDmin à ID max </a></li>
+          <li><a href="findbyname.php"> sur le Titre </a></li>
+          <li><a href="catalogue.php"> Médiathèque (coverflow) </a></li>
+      </div>	  
+    </ul>
+</nav>
